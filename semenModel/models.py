@@ -4,11 +4,11 @@ from django.db import models
 # Create your models here.
 
 class ImageData(models.Model):
-    image = models.ImageField(null=True)
-    percent = models.CharField(max_length=255)
-    fragments = models.IntegerField()
-    fragmented_degrades = models.IntegerField()
-    normals = models.IntegerField()
+    image = models.ImageField(upload_to='input_images')
+    percent = models.CharField(max_length=255, null=True)
+    fragments = models.FloatField(null=True)
+    fragmented_degrades = models.FloatField(null=True)
+    normals = models.FloatField(null=True)
 
     class Meta:
         verbose_name = 'Image Data'

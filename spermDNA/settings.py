@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a#&mnno)77-6h)q5#a+$sv9dy%ahxc7u#zuq)q5!cim8g377iq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -70,6 +70,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'spermDNA.wsgi.application'
 
@@ -123,8 +124,9 @@ STATIC_URL = 'static/'
 
 
 # By default, MEDIA_ROOT - default PC path where images are stored
-MEDIA_URL = '/input_images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'input_images/')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
