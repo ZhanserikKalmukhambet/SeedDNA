@@ -2,48 +2,51 @@ import json
 import os
 
 from PIL import Image, ImageEnhance
+from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
+from django.template.defaulttags import csrf_token
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
+from spermDNA import settings
 from spermDNA.settings import BASE_DIR
 from .serializers import ImageDataSerializer
+from .constants import INPUT_PHOTO_FOLDER_PATH, BAW_IMAGES_FOLDER_PATH
 
 
-# FBV - function based view
 @api_view(['POST'])
 def predict_view(request):
-    if request.method == 'POST':
-        serializer = ImageDataSerializer(data=request.data)
+    if request.method == 'POST' and request.FILES['image']:
+        uploaded_image = request.FILES['image']
 
-        if serializer.is_valid():
-            try:
-                serializer.save()
-            except Exception as e:
-                print("Error saving data", str(e))
+        input_folder = os.path.join(settings.MEDIA_ROOT, INPUT_PHOTO_FOLDER_PATH)
+        fs = FileSystemStorage(location=input_folder)
 
-            # there i need to call function which makes image baw - make_baw
-            # make_baw()
+        try:
+            saved_file = fs.save(uploaded_image.name, uploaded_image)
+            file_url = fs.url(saved_file)
+        except Exception as e:
+            return JsonResponse({'message': str(e)}, status=400)
 
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        input_path = os.path.join(input_folder, saved_file)
 
-        print("Request Data:", request.data)
-        print("Serializer Errors:", serializer.errors)
+        baw_folder = os.path.join(settings.MEDIA_ROOT, BAW_IMAGES_FOLDER_PATH)
+        baw_path = os.path.join(baw_folder, saved_file)
 
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        make_baw(input_path=input_path, baw_path=baw_path)
+
+        return JsonResponse({'message': 'Image saved successfully', 'file_url': file_url})
 
 
-# testing : add constants : INPUT_PATH, media_root = os.path.join(BASE_DIR, 'media/'). etc.
-def make_baw():
-    media_root = os.path.join(BASE_DIR, 'media/')
+def make_baw(input_path, baw_path):
+    global img
 
-    input_path = media_root + 'input_images\Снимок_экрана_2023-10-06_215218.png'
+    try:
+        img = Image.open(input_path)
+    except Exception as e:
+        print(str(e))
 
-    input_path = os.getcwd() + input_path
-    output_path = media_root + 'baw_images/ready.png'
-
-    img = Image.open(input_path)
     contrast = ImageEnhance.Contrast(img)
     r = contrast.enhance(1.5)
     thresh = 200
@@ -51,6 +54,10 @@ def make_baw():
     def fn(x): return 255 if x > thresh else 0
 
     r = r.convert('1').point(fn, mode='1')
-    r.save(fp=output_path)
+
+    try:
+        r.save(fp=baw_path)
+    except Exception as e:
+        print(str(e))
+
     r.close()
-    img.close()
