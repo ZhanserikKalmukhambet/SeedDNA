@@ -124,8 +124,8 @@ STATIC_URL = 'static/'
 
 
 # By default, MEDIA_ROOT - default PC path where images are stored
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR
 
 
 # Default primary key field type
