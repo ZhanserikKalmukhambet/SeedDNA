@@ -21,7 +21,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('models/', include('seedModel.urls'))
+    path('models/', include('seedModel.urls')),
+    path('auth/', include('seedAuth.urls'))
 ]
 
 if settings.DEBUG:

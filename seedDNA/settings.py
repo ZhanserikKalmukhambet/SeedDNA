@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# Using my own CustomUser
+AUTH_USER_MODEL = 'seedAuth.UserData'
+
 
 # Application definition
 
