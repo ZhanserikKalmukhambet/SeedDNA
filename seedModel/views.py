@@ -1,15 +1,13 @@
-import logging
-import os
-
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
+from django.test import TestCase
 
-import torch
+import torch, logging, os
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from .constants import INPUT_PHOTO_FOLDER_PATH, BAW_IMAGES_FOLDER_PATH, OUTPUT_PHOTO_FOLDER_PATH
-from .tools import make_baw, predict
+from .tools import make_baw, predict, get_host_name
 
 FORMAT = '%(asctime)s %(message)s'
 logging.basicConfig(format=FORMAT)
@@ -67,7 +65,7 @@ class PredictView(APIView):
             relative_path = '/' + relative_path.replace("\\", "/")
 
             data = {
-                'file_url': relative_path,
+                'file_url': get_host_name(relative_path),
                 'percent': str(round(output_data.get('percent') * 100, 2)) + '%',
                 'fragments': output_data['data'][0],
                 'fragmented_degradeds': output_data['data'][2],

@@ -16,11 +16,12 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=201)
 
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         try:
             refresh_token = request.data["refresh_token"]

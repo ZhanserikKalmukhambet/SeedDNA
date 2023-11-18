@@ -1,10 +1,16 @@
 from PIL import Image, ImageEnhance
 
-import logging
+import logging, socket
 
 FORMAT = '%(asctime)s %(message)s'
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger('logger')
+
+HOSTNAME = socket.gethostname()
+
+
+def get_host_name(relative_path):
+    return 'http://' + socket.gethostbyname(HOSTNAME) + ':8001' + relative_path
 
 
 def make_baw(input_path, baw_path):
@@ -14,6 +20,7 @@ def make_baw(input_path, baw_path):
         img = Image.open(input_path)
     except Exception as e:
         print(str(e))
+        return "error"
 
     contrast = ImageEnhance.Contrast(img)
     r = contrast.enhance(1.5)
@@ -28,8 +35,11 @@ def make_baw(input_path, baw_path):
         r.save(fp=baw_path)
     except Exception as e:
         print(str(e))
+        return "error"
 
     r.close()
+
+    return 'success'
 
 
 def predict(input_model, img_path, save_dir, data=False):

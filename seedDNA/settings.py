@@ -43,8 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Local
-    'seedModel',
-    'seedAuth',
+    # 'seedModel',
+    # 'seedAuth',
+
+    # For providing unit tests
+    'seedModel.apps.SeedModelConfig',
+    'seedAuth.apps.SeedAuthConfig',
 
     'rest_framework_simplejwt.token_blacklist'
 ]
@@ -55,7 +59,7 @@ REST_FRAMEWORK = {
     ),
 }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
   }
 
