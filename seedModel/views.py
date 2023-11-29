@@ -33,6 +33,7 @@ class PredictView(APIView):
                 saved_file_name = fs.save(uploaded_image.name, uploaded_image)
                 file_url = fs.url(saved_file_name)
             except Exception as e:
+                logger.error(e)
                 return JsonResponse({'message': str(e)}, status=400)
 
             input_path = os.path.join(input_folder, saved_file_name)

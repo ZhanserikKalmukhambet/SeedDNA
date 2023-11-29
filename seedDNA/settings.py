@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Local
     # 'seedModel',
     # 'seedAuth',
+    'django_prometheus',
 
     # For providing unit tests
     'seedModel.apps.SeedModelConfig',
@@ -64,6 +65,8 @@ SIMPLE_JWT = {
   }
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,6 +74,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'seedDNA.urls'
