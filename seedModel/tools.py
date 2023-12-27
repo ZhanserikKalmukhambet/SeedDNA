@@ -10,7 +10,8 @@ HOSTNAME = socket.gethostname()
 
 
 def get_host_name(relative_path):
-    return 'http://' + socket.gethostbyname(HOSTNAME) + ':8001' + relative_path
+    # return 'http://' + socket.gethostbyname(HOSTNAME) + ':8001' + relative_path
+    return 'http://' + 'localhost' + ':8001' + relative_path
 
 
 def make_baw(input_path, baw_path):

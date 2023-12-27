@@ -17,7 +17,7 @@ model = torch.hub.load('./', 'custom', path='./model/best.pt', source='local', f
 
 
 class PredictView(APIView):
-    permission_classes = (IsAuthenticated, )
+    # permission_classes = (IsAuthenticated, )
 
     def post(self, request):
         cwd = os.getcwd()
